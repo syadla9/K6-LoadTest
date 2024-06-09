@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+
+    environment {
+        K6_API_TOKEN=credentials("K6_API_TOKEN")
+        K6_CLOUD_PROJECT_ID=credentials("K6_CLOUD_PROJECT_ID")
+      
+    }
+    stages {
+        stage('Performance Testing') {
+            steps {
+                echo 'Running K6 performance tests...'
+               
+                echo 'Let us login into k6'
+                sh 'k6 login cloud --token ${K6_API_TOKEN}'
+                
+                echo 'login successful'
+                sh 'k6 cloud loadtests/performance-test.js'
+                echo 'Completed Running K6 performance tests!'
+            }
+        }
+    }
+}
